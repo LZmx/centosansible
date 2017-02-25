@@ -1,0 +1,7 @@
+---
+mariadb_version: 10.1
+
+mariadb_yum_packages:
+  - { name: MariaDB-server, state: latest }
+  - { name: MariaDB-client, state: latest }
+  - { name: MariaDB-devel, state: latest }

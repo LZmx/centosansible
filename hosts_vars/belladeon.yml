@@ -1,0 +1,160 @@
+---
+root_path: /var/www
+
+mysql_databases:
+  - { name: belladeon, state: present, encoding: utf8mb4, collation: utf8mb4_unicode_ci }
+
+###
+# belladeon
+belladeon_domain: ~^(.*)\.dev\.belladeon$
+belladeon_domains:
+  - "{{ belladeon_domain }}"
+  - ~vagrantshare.com$
+belladeon_auth_enabled: no
+
+belladeon_env:
+  - { name: app_env, value: local }
+  - { name: app_debug, value: 'true' }
+  - { name: app_key, value: a1Utod8UygQXKYiHsZm3r0Mwdl6fKpEp }
+  - { name: db_host, value: 127.0.0.1 }
+  - { name: db_database, value: belladeon }
+  - { name: db_username, value: root }
+  - { name: db_password, value: ~ }
+  - { name: cache_driver, value: redis }
+  - { name: session_driver, value: redis }
+  - { name: queue_driver, value: sync }
+  - { name: redis_host, value: 127.0.0.1 }
+  - { name: redis_password, value: "{{ redis_password }}" }
+  - { name: redis_port, value: 6379 }
+  - { name: mail_driver, value: mandrill }
+  - { name: mail_host, value: mailtrap.io }
+  - { name: mail_port, value: 2525 }
+  - { name: mail_username, value: null }
+  - { name: mail_password, value: null }
+  - { name: mail_encryption, value: null }
+
+php_xdebug_module_path: /usr/lib64/php/modules
+
+yum_common_packages:
+  - { name: htop, state: present }
+  - { name: vim, state: latest }
+  - { name: wget, state: latest }
+  - { name: net-tools, state: latest }
+  - { name: curl, state: latest }
+  - { name: nodejs, state: latest }
+  - { name: npm, state: latest }
+  - { name: git, state: latest }
+  - { name: python-devel, state: latest }
+
+php:
+
+  packages:
+    - { name: php70w-common, state: latest }
+    - { name: php70w-cli, state: latest }
+    - { name: php70w-mysql, state: latest }
+    - { name: php70w-pdo, state: latest }
+    - { name: php70w-devel, state: latest }
+    - { name: php70w-xml, state: latest }
+    - { name: php70w-fpm, state: latest }
+    - { name: php70w-mbstring, state: latest }
+    - { name: php70w-bcmath, state: latest }
+    - { name: php70w-gd, state: latest }
+    - { name: php70w-intl, state: latest }
+    - { name: php70w-mcrypt, state: latest }
+    - { name: php70w-soap, state: latest }
+
+  install_composer: Yes
+
+  composer:
+
+    home_path: '~/.composer'
+    global_packages:
+      - { name: hirak/prestissimo }
+
+  settings:
+
+    ini:
+      engine: 'On'
+      short_open_tag: 'Off'
+      precision: 14
+      output_buffering: 4096
+      zlib:
+        output_compression: 'Off'
+      implicit_flush: 'Off'
+      serialize_precision: 17
+      zend:
+        enable_gc: 'On'
+        multibyte: 'Off'
+        assertions: -1
+      expose_php: 'On'
+      max_execution_time: 30
+      max_input_time: 60
+      memory_limit: 128M
+      error_reporting: 'E_ALL & ~E_DEPRECATED & ~E_STRICT'
+      display_errors: 'On'
+      display_startup_errors: 'Off'
+      log_errors: 'On'
+      log_errors_max_len: 1024
+      ignore_repeated_errors: 'Off'
+      ignore_repeated_source: 'Off'
+      report_memleaks: 'On'
+      report_zend_debug: 0
+      track_errors: 'Off'
+      html_errors: 'On'
+      variables_order: '"GPCS"'
+      request_order: '"GP"'
+      register_argc_argv: 'Off'
+      auto_globals_jit: 'On'
+      post_max_size: 8M
+      auto_prepend_file: ~
+      auto_append_file: ~
+      default_mimetype: '"text/html"'
+      default_charset: '"UTF-8"'
+      doc_root: ~
+      user_dir: ~
+      enable_dl: 'Off'
+      file_uploads: 'On'
+      upload_tmp_dir: ~
+      upload_max_filesize: 2M
+      max_file_uploads: 20
+      allow_url_fopen: 'On'
+      allow_url_include: 'Off'
+      default_socket_timeout: 60
+      cli_server:
+        color: 'On'
+      date:
+        timezone: Asia/Hong_Kong
+      session:
+        name: belladeon
+        save_path: '"/tmp"'
+        use_strict_mode: 0
+        use_cookies: 1
+        cookie_secure:
+        use_only_cookies: 1
+        auto_start: 0
+        cookie_lifetime: 0
+        cookie_path: /
+        cookie_domain: ~
+        cookie_httponly: ~
+        serialize_handler: php
+        gc_probability: 1
+        gc_divisor: 1000
+        gc_maxlifetime: 1440
+        referer_check: ~
+        entropy_length: 32
+        entropy_file: /dev/urandom
+        cache_limiter: nocache
+        cache_expire: 180
+        use_trans_sid: 0
+        hash_function: 0
+        hash_bits_per_character: 5
+        upload_progress:
+          enabled: 'On'
+      url_rewriter:
+        tags: '"a=href,area=href,frame=src,input=src,form=fakeentry"'
+
+php_xdebug_remote_enable: "true"
+php_xdebug_remote_connect_back: "true"
+php_xdebug_remote_host: 192.168.56.1
+php_xdebug_remote_log: /tmp/xdebug.log
+php_xdebug_remote_autostart: "true"

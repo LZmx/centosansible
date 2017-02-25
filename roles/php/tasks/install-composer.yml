@@ -1,0 +1,14 @@
+---
+- name: install composer
+  become: yes
+  shell: curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+  args:
+    creates: /usr/local/bin/composer
+
+- name: install composer global packages
+  shell: >
+    COMPOSER_HOME=~
+    composer global require {{ item.name }}:{{ item.release | default('@stable') }} --no-progress
+    creates=~/vendor/{{ item.name }}
+  with_items: php.composer.global_packages
+  when: php.composer.global_packages is defined

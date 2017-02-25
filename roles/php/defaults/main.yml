@@ -1,0 +1,111 @@
+---
+
+php_version: 7.0.3-1.w7
+
+php:
+
+  packages:
+    - { name: "php70w-common-{{ php_version }}", state: latest }
+    - { name: "php70w-cli-{{ php_version }}", state: latest }
+    - { name: "php70w-mysql-{{ php_version }}", state: latest }
+    - { name: "php70w-pdo-{{ php_version }}", state: latest }
+    - { name: "php70w-devel-{{ php_version }}", state: latest }
+    - { name: "php70w-xml-{{ php_version }}", state: latest }
+    - { name: "php70w-fpm-{{ php_version }}", state: latest }
+    - { name: "php70w-mbstring-{{ php_version }}", state: latest }
+    - { name: "php70w-bcmath-{{ php_version }}", state: latest }
+    - { name: "php70w-gd-{{ php_version }}", state: latest }
+    - { name: "php70w-intl-{{ php_version }}", state: latest }
+    - { name: "php70w-mcrypt-{{ php_version }}", state: latest }
+    - { name: "php70w-soap-{{ php_version }}", state: latest }
+
+  install_composer: Yes
+
+  composer:
+
+    global_packages:
+      - { name: hirak/prestissimo }
+
+  settings:
+
+    ini:
+      engine: 'On'
+      short_open_tag: 'Off'
+      precision: 14
+      output_buffering: 4096
+      zlib:
+        output_compression: 'Off'
+      implicit_flush: 'Off'
+      serialize_precision: 17
+      zend:
+        enable_gc: 'On'
+        multibyte: 'Off'
+        assertions: -1
+      expose_php: 'On'
+      max_execution_time: 30
+      max_input_time: 60
+      memory_limit: 128M
+      error_reporting: 'E_ALL & ~E_DEPRECATED & ~E_STRICT'
+      display_errors: 'Off'
+      display_startup_errors: 'Off'
+      log_errors: 'On'
+      log_errors_max_len: 1024
+      ignore_repeated_errors: 'Off'
+      ignore_repeated_source: 'Off'
+      report_memleaks: 'On'
+      report_zend_debug: 0
+      track_errors: 'Off'
+      html_errors: 'On'
+      variables_order: '"GPCS"'
+      request_order: '"GP"'
+      register_argc_argv: 'Off'
+      auto_globals_jit: 'On'
+      post_max_size: 8M
+      auto_prepend_file: ~
+      auto_append_file: ~
+      default_mimetype: '"text/html"'
+      default_charset: '"UTF-8"'
+      doc_root: ~
+      user_dir: ~
+      enable_dl: 'Off'
+      file_uploads: 'On'
+      upload_tmp_dir: ~
+      upload_max_filesize: 2M
+      max_file_uploads: 20
+      allow_url_fopen: 'On'
+      allow_url_include: 'Off'
+      default_socket_timeout: 60
+      cli_server:
+        color: 'On'
+      date:
+        timezone: Asia/Hong_Kong
+      session:
+        name: FRANK
+        save_path: '"/tmp"'
+        use_strict_mode: 0
+        use_cookies: 1
+        cookie_secure:
+        use_only_cookies: 1
+        auto_start: 0
+        cookie_lifetime: 0
+        cookie_path: /
+        cookie_domain: ~
+        cookie_httponly: ~
+        serialize_handler: php
+        gc_probability: 1
+        gc_divisor: 1000
+        gc_maxlifetime: 1440
+        referer_check: ~
+        entropy_length: 32
+        entropy_file: /dev/urandom
+        cache_limiter: nocache
+        cache_expire: 180
+        use_trans_sid: 0
+        hash_function: 0
+        hash_bits_per_character: 5
+        upload_progress:
+          enabled: 'On'
+      url_rewriter:
+        tags: '"a=href,area=href,frame=src,input=src,form=fakeentry"'
+
+

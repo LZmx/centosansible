@@ -1,0 +1,10 @@
+---
+- hosts: all
+  roles:
+    - { role: common }
+    - { role: development }
+    - { role: nginx }
+    - { role: php }
+    - { role: xdebug }
+    - { role: mariadb }
+    - { role: redis }

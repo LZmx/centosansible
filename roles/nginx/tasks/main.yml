@@ -1,0 +1,17 @@
+---
+- name: install nginx
+  become: yes
+  yum:
+    name: "{{ item.name }}"
+    state: "{{ item.state }}"
+  with_items:
+    - { name: nginx18, state: present }
+  notify:
+    - restart nginx
+
+- name: configures runlevel
+  become: yes
+  service:
+    name: nginx
+    enabled: yes
+    state: started

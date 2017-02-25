@@ -1,0 +1,29 @@
+---
+- name: install
+  become: yes
+  yum:
+    name: redis-2.8.19
+    state: present
+
+- name: enable overcommit
+  become: yes
+  sysctl:
+    name: vm.overcommit_memory
+    value: 1
+    state: present
+    reload: yes
+    ignoreerrors: yes
+
+- name: configure
+  become: yes
+  template:
+    src: redis.conf.j2
+    dest: /etc/redis.conf
+  notify:
+    - restart redis
+
+- name: configure runlevel
+  become: yes
+  service:
+    name: redis
+    enabled: yes

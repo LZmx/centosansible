@@ -1,0 +1,47 @@
+---
+- name: add repo
+  become: yes
+  template:
+    src: MariaDB.repo.j2
+    dest: /etc/yum.repos.d/MariaDB.repo
+    owner: root
+    group: root
+    mode: 0644
+
+- name: install
+  become: yes
+  yum:
+    name: "{{ item.name }}"
+    state: "{{ item.state }}"
+  with_items: mariadb_yum_packages
+  notify:
+    - restart mariadb
+
+- name: configures runlevel
+  become: yes
+  service:
+    name: mysql
+    enabled: yes
+
+- name: install required pip packages
+  become: yes
+  pip:
+    name: "{{ item.name }}"
+    state: "{{ item.state }}"
+  with_items:
+    - { name: MySQL-python, state: present }
+  tags:
+    - mariadb
+
+- name: create databases
+  mysql_db:
+    name: "{{ item.name }}"
+    state: "{{ item.state }}"
+    encoding: "{{ item.encoding | default(utf8mb4) }}"
+    collation: "{{ item.collation | default(utf8mb4_unicode_ci) }}"
+    login_user: root
+    login_password: ~
+  with_items: mysql_databases
+  when: mysql_databases
+  tags:
+    - mariadb

@@ -1,0 +1,20 @@
+---
+yum_repos:
+  - { state: present, name: "https://mirror.webtatic.com/yum/el7/webtatic-release.rpm", key: /etc/pki/rpm-gpg/RPM-GPG-KEY-webtatic-el7 }
+
+yum_common_packages:
+  - { name: htop, state: present }
+  - { name: vim, state: latest }
+  - { name: wget, state: latest }
+  - { name: net-tools, state: latest }
+  - { name: curl, state: latest }
+  - { name: nodejs, state: latest }
+  - { name: npm, state: latest }
+  - { name: python-devel, state: latest }
+  - { name: git, state: latest }
+  - { name: telnet, state: latest }
+
+pip_download_dest: /tmp
+pip_version: ~
+python: python
+pip: pip

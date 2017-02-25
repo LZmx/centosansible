@@ -1,0 +1,18 @@
+---
+
+- name: Configure locale environment
+  become: yes
+  copy:
+    src: etc/environment
+    dest: /etc/environment
+
+- name: Configure shell environment
+  template:
+    src: bash/bash_profile.j2
+    dest: /home/vagrant/.bash_profile
+
+- name: configure SELINUX
+  become: yes
+  selinux:
+    state: permissive
+    policy: targeted

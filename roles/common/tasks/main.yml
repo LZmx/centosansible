@@ -1,0 +1,60 @@
+---
+
+- name: system upgrade
+  become: yes
+  shell: yum update -y && touch ~/.yum_system_upgraded
+  args:
+    creates: ~/.yum_system_upgraded
+
+- name: add ssh agent line to sudoers
+  become: yes
+  lineinfile:
+    dest: /etc/sudoers
+    state: present
+    regexp: SSH_AUTH_SOCK
+    line: Defaults env_keep += "SSH_AUTH_SOCK"
+
+- name: install yum repos
+  become: yes
+  yum:
+    name: "{{ item.name }}"
+    state: "{{ item.state }}"
+  with_items: yum_repos
+
+- name: import GPG keys
+  become: yes
+  rpm_key:
+    key: "{{ item.key }}"
+    state: "{{ item.state }}"
+  with_items: yum_repos
+
+- name: install yum packages
+  become: yes
+  yum:
+    name: "{{ item.name }}"
+    state: "{{ item.state }}"
+  with_items: yum_common_packages
+  tags:
+    - yum:install
+
+- name: Check to see if pip is already installed
+  command: "{{ pip }} --version"
+  ignore_errors: yes
+  changed_when: false # read-only task
+  always_run: true # for check mode
+  register: pip_is_installed
+
+- name: include pip
+  include: install-pip.yml
+  when: pip_is_installed.rc != 0
+
+- name: create htop config folder
+  file:
+    name: ~/.config/htop
+    state: directory
+
+- name: configure htop
+  template:
+    src: config/htop/htoprc.j2
+    dest: ~/.config/htop/htoprc
+    mode: 0644
